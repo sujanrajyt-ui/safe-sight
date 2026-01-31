@@ -109,14 +109,14 @@ export function App() {
         
         {/* Header Overlay with status */}
         <div className="absolute top-4 left-4 z-[999]">
-          <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-xl px-5 py-3 flex items-center gap-4 shadow-2xl">
-            <div className="relative">
-              <div className="w-3 h-3 bg-emerald-500 rounded-full" />
-              <div className="absolute inset-0 w-3 h-3 bg-emerald-500 rounded-full animate-ping opacity-75" />
+          <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-lg md:rounded-xl px-3 md:px-5 py-2 md:py-3 flex items-center gap-3 md:gap-4 shadow-2xl">
+            <div className="relative flex-shrink-0">
+              <div className="w-2 md:w-3 h-2 md:h-3 bg-emerald-500 rounded-full" />
+              <div className="absolute inset-0 w-2 md:w-3 h-2 md:h-3 bg-emerald-500 rounded-full animate-ping opacity-75" />
             </div>
-            <div>
-              <span className="text-sm font-bold text-white">Live Risk Map</span>
-              <p className="text-xs text-slate-400">
+            <div className="min-w-0">
+              <span className="text-xs md:text-sm font-bold text-white block">Live Risk Map</span>
+              <p className="text-xs text-slate-400 truncate">
                 {analyses.length === 0 
                   ? 'No locations analyzed yet'
                   : `${analyses.length} location${analyses.length !== 1 ? 's' : ''} analyzed`
@@ -126,8 +126,8 @@ export function App() {
           </div>
         </div>
         
-        {/* Zoom Controls Info */}
-        <div className="absolute top-4 right-4 z-[999] flex items-center gap-2 text-xs text-slate-500">
+        {/* Zoom Controls Info - hidden on mobile */}
+        <div className="absolute top-4 right-4 z-[999] hidden md:flex items-center gap-2 text-xs text-slate-500">
           <kbd className="px-2 py-1 bg-slate-800/80 rounded">Scroll</kbd>
           <span>to zoom</span>
           <kbd className="px-2 py-1 bg-slate-800/80 rounded ml-2">Drag</kbd>
