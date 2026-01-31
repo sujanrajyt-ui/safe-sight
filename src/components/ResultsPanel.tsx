@@ -27,7 +27,7 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: '100%', opacity: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="absolute top-4 right-4 bottom-4 w-[calc(100%-2rem)] md:w-[420px] bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden z-[1000] flex flex-col max-h-[calc(100%-2rem)]"
+        className="fixed md:absolute inset-0 md:inset-auto md:top-4 md:right-4 md:bottom-4 md:w-[420px] md:max-h-[calc(100vh-2rem)] bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 md:rounded-2xl shadow-2xl overflow-hidden z-[1000] flex flex-col rounded-t-2xl md:rounded-2xl"
       >
         {/* Header */}
         <div className={`p-4 md:p-6 bg-gradient-to-r ${colors.gradient}`}>
