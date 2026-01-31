@@ -91,6 +91,8 @@ export function App() {
         onAnalyze={handleAnalyze}
         isAnalyzing={isAnalyzing}
         progress={progress}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
       />
       
       {/* Main Map Area */}
