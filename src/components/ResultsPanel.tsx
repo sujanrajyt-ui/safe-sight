@@ -27,23 +27,23 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: '100%', opacity: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="absolute top-4 right-4 bottom-4 w-[420px] bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden z-[1000] flex flex-col"
+        className="absolute top-4 right-4 bottom-4 w-[calc(100%-2rem)] md:w-[420px] bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl overflow-hidden z-[1000] flex flex-col max-h-[calc(100%-2rem)]"
       >
         {/* Header */}
-        <div className={`p-6 bg-gradient-to-r ${colors.gradient}`}>
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur">
-                <AlertTriangle className="w-7 h-7 text-white" />
+        <div className={`p-4 md:p-6 bg-gradient-to-r ${colors.gradient}`}>
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-center gap-3 md:gap-4 min-w-0">
+              <div className="w-10 md:w-14 h-10 md:h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur flex-shrink-0">
+                <AlertTriangle className="w-5 md:w-7 h-5 md:h-7 text-white" />
               </div>
-              <div>
-                <h2 className="text-xl font-bold text-white">Analysis Complete</h2>
-                <p className="text-white/80 text-sm mt-0.5">{analysis.locationName}</p>
+              <div className="min-w-0">
+                <h2 className="text-lg md:text-xl font-bold text-white truncate">Analysis Complete</h2>
+                <p className="text-white/80 text-xs md:text-sm mt-0.5 truncate">{analysis.locationName}</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors flex-shrink-0"
             >
               <X className="w-5 h-5 text-white" />
             </button>
@@ -51,48 +51,48 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
         </div>
 
         {/* Risk Score */}
-        <div className="p-6 border-b border-slate-800">
-          <div className="flex items-center justify-between">
-            <span className="text-slate-400 text-sm font-semibold tracking-wider">RISK SCORE</span>
-            <span className={`px-3 py-1.5 rounded-lg text-sm font-bold ${colors.bg} border`}>
+        <div className="p-4 md:p-6 border-b border-slate-800">
+          <div className="flex items-center justify-between mb-3 md:mb-4">
+            <span className="text-slate-400 text-xs md:text-sm font-semibold tracking-wider">RISK SCORE</span>
+            <span className={`px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-bold ${colors.bg} border`}>
               {analysis.riskLevel}
             </span>
           </div>
           
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center">
             <motion.div 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: 'spring' }}
               className="text-center"
             >
-              <span className="text-5xl font-black text-white">{analysis.riskScore}</span>
-              <span className="text-xl text-slate-400 font-medium">/100</span>
+              <span className="text-4xl md:text-5xl font-black text-white">{analysis.riskScore}</span>
+              <span className="text-lg md:text-xl text-slate-400 font-medium">/100</span>
             </motion.div>
           </div>
         </div>
 
         {/* Frame Statistics */}
         {analysis.frameStats && (
-          <div className="px-6 py-4 border-b border-slate-800 bg-slate-800/30">
+          <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-800 bg-slate-800/30">
             <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
               <BarChart3 className="w-4 h-4" /> Frame Analysis Stats
             </h3>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
               <div className="text-center p-2 bg-slate-800/50 rounded-lg">
-                <p className="text-lg font-bold text-white">{analysis.frameStats.processedFrames}</p>
+                <p className="text-base md:text-lg font-bold text-white">{analysis.frameStats.processedFrames}</p>
                 <p className="text-xs text-slate-500">Frames</p>
               </div>
               <div className="text-center p-2 bg-slate-800/50 rounded-lg">
-                <p className="text-lg font-bold text-cyan-400">{analysis.frameStats.avgVehicles}</p>
+                <p className="text-base md:text-lg font-bold text-cyan-400">{analysis.frameStats.avgVehicles}</p>
                 <p className="text-xs text-slate-500">Avg Vehicles</p>
               </div>
               <div className="text-center p-2 bg-slate-800/50 rounded-lg">
-                <p className="text-lg font-bold text-purple-400">{analysis.frameStats.avgPersons}</p>
+                <p className="text-base md:text-lg font-bold text-purple-400">{analysis.frameStats.avgPersons}</p>
                 <p className="text-xs text-slate-500">Avg Persons</p>
               </div>
               <div className="text-center p-2 bg-slate-800/50 rounded-lg">
-                <p className="text-lg font-bold text-orange-400">{analysis.frameStats.maxScore}</p>
+                <p className="text-base md:text-lg font-bold text-orange-400">{analysis.frameStats.maxScore}</p>
                 <p className="text-xs text-slate-500">Peak Risk</p>
               </div>
             </div>
@@ -100,7 +100,7 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
         )}
 
         {/* Safety Assessment */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
           <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-blue-400" />
             Safety Assessment
@@ -165,23 +165,23 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
         </div>
 
         {/* Footer Stats */}
-        <div className="p-6 border-t border-slate-800 bg-slate-950/50">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="p-4 md:p-6 border-t border-slate-800 bg-slate-950/50">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
             <div className="text-center">
-              <div className="w-12 h-12 mx-auto mb-2 bg-slate-800 rounded-xl flex items-center justify-center">
-                <Video className="w-6 h-6 text-slate-400" />
+              <div className="w-10 md:w-12 h-10 md:h-12 mx-auto mb-2 bg-slate-800 rounded-xl flex items-center justify-center">
+                <Video className="w-5 md:w-6 h-5 md:h-6 text-slate-400" />
               </div>
               <p className="text-xs text-slate-500">Source</p>
-              <p className="text-sm text-white font-medium truncate" title={analysis.videoName}>
+              <p className="text-xs md:text-sm text-white font-medium truncate" title={analysis.videoName}>
                 {analysis.videoName.length > 10 ? `${analysis.videoName.substring(0, 10)}...` : analysis.videoName}
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 mx-auto mb-2 bg-slate-800 rounded-xl flex items-center justify-center">
-                <Clock className="w-6 h-6 text-slate-400" />
+              <div className="w-10 md:w-12 h-10 md:h-12 mx-auto mb-2 bg-slate-800 rounded-xl flex items-center justify-center">
+                <Clock className="w-5 md:w-6 h-5 md:h-6 text-slate-400" />
               </div>
               <p className="text-xs text-slate-500">Time</p>
-              <p className="text-sm text-white font-medium">
+              <p className="text-xs md:text-sm text-white font-medium">
                 {new Date(analysis.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
