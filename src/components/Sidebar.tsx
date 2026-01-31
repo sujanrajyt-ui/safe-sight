@@ -94,26 +94,26 @@ export function Sidebar({
   };
 
   return (
-    <div className="w-full md:w-96 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 md:border-r border-t md:border-t-0 border-slate-800/50 flex flex-col md:h-screen h-auto md:overflow-hidden overflow-y-auto order-last md:order-none">
+    <div className="w-full md:w-96 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 md:border-r border-t md:border-t-0 border-slate-800/50 flex flex-col md:h-screen h-auto md:overflow-hidden overflow-y-auto order-last md:order-none max-h-[40vh] md:max-h-screen">
       {/* Logo Header */}
-      <div className="p-6 border-b border-slate-800/50">
+      <div className="p-3 md:p-6 border-b border-slate-800/50 flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600 via-red-500 to-orange-500 flex items-center justify-center shadow-lg shadow-red-500/30">
-              <AlertTriangle className="w-7 h-7 text-white" />
+            <div className="w-10 md:w-14 h-10 md:h-14 rounded-2xl bg-gradient-to-br from-red-600 via-red-500 to-orange-500 flex items-center justify-center shadow-lg shadow-red-500/30 flex-shrink-0">
+              <AlertTriangle className="w-5 md:w-7 h-5 md:h-7 text-white" />
             </div>
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-slate-900 flex items-center justify-center">
               <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
             </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-black text-white tracking-tight">SAFE SIGHT</h1>
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-black text-white tracking-tight truncate">SAFE SIGHT</h1>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-8">
+      <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-6 md:space-y-8">
         {/* Error Message */}
         <AnimatePresence>
           {errorMessage && (
