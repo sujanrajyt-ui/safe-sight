@@ -15,6 +15,7 @@ export function App() {
   const [progress, setProgress] = useState(0);
   const [analyses, setAnalyses] = useState<RiskAnalysis[]>([]);
   const [currentAnalysis, setCurrentAnalysis] = useState<RiskAnalysis | null>(null);
+  const [errorMessage, setErrorMessage] = useState('');
   
   // Map state - default center is India (matching Python app)
   const [mapCenter, setMapCenter] = useState<[number, number]>([20.5937, 78.9629]);
@@ -25,10 +26,19 @@ export function App() {
     
     setIsAnalyzing(true);
     setProgress(0);
+    setErrorMessage('');
     
     try {
       // Run the analysis pipeline (converted from Python analysis.py)
       const result = await analyzeVideo(videoFile, setProgress);
+      
+      // Check if valid street footage
+      if (!result.isValidStreetFootage) {
+        setErrorMessage('This is not a footage of street or road. Please upload traffic/street footage.');
+        setVideoFile(null);
+        setIsAnalyzing(false);
+        return;
+      }
       
       const newAnalysis: RiskAnalysis = {
         id: Date.now().toString(),
@@ -40,7 +50,8 @@ export function App() {
         timestamp: new Date(),
         videoName: videoFile.name,
         violations: result.violations,
-        frameStats: result.frameStats
+        frameStats: result.frameStats,
+        isValidStreetFootage: result.isValidStreetFootage
       };
       
       setAnalyses(prev => [...prev, newAnalysis]);
@@ -54,6 +65,7 @@ export function App() {
       setSelectedLocation(null);
     } catch (error) {
       console.error('[App] Analysis failed:', error);
+      setErrorMessage('Analysis failed. Please try again.');
     } finally {
       setIsAnalyzing(false);
       setProgress(0);
@@ -67,8 +79,8 @@ export function App() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-950 overflow-hidden">
-      {/* Sidebar - matching Python Streamlit sidebar */}
+    <div className="flex flex-col md:flex-row h-screen bg-slate-950 overflow-hidden">
+      {/* Sidebar - bottom on mobile, left on desktop */}
       <Sidebar
         locationName={locationName}
         setLocationName={setLocationName}
