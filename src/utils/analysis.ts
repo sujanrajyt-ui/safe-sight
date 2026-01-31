@@ -21,6 +21,7 @@ interface AnalysisResult {
     maxScore: number;
     minScore: number;
   };
+  isValidStreetFootage: boolean;
 }
 
 /**
@@ -95,9 +96,18 @@ export async function analyzeVideo(
         avgPersons: 0,
         maxScore: 0,
         minScore: 0
-      }
+      },
+      isValidStreetFootage: false
     };
   }
+  
+  // Validate street/road footage by checking for vehicles and/or pedestrians
+  const hasVehicles = frameAnalyses.some(f => f.vehicleCount > 0);
+  const hasPersons = frameAnalyses.some(f => f.personCount > 0);
+  const avgVehicles = frameAnalyses.reduce((sum, f) => sum + f.vehicleCount, 0) / frameAnalyses.length;
+  
+  // Valid street footage should have vehicles or pedestrians (at least 0.5 average vehicles or 1+ person frames)
+  const isValidStreetFootage = hasVehicles || (hasPersons && frameAnalyses.length > 5);
   
   // Aggregate results (using actual Python logic)
   const { riskLevel, riskScore } = aggregateVideoRisk(frameScores);
@@ -106,12 +116,12 @@ export async function analyzeVideo(
   const violations = generateViolations(frameAnalyses, riskScore);
   
   // Compute frame statistics
-  const avgVehicles = frameAnalyses.reduce((sum, f) => sum + f.vehicleCount, 0) / frameAnalyses.length;
+  const avgVehicles2 = frameAnalyses.reduce((sum, f) => sum + f.vehicleCount, 0) / frameAnalyses.length;
   const avgPersons = frameAnalyses.reduce((sum, f) => sum + f.personCount, 0) / frameAnalyses.length;
   const maxScore = Math.max(...frameScores);
   const minScore = Math.min(...frameScores);
   
-  console.log(`[analysis] Finished ${file.name}: level=${riskLevel}, score=${riskScore}`);
+  console.log(`[analysis] Finished ${file.name}: level=${riskLevel}, score=${riskScore}, isValidFootage=${isValidStreetFootage}`);
   
   return {
     riskLevel,
@@ -120,11 +130,12 @@ export async function analyzeVideo(
     frameStats: {
       totalFrames: totalEstimatedFrames,
       processedFrames: frameAnalyses.length,
-      avgVehicles: Math.round(avgVehicles * 10) / 10,
+      avgVehicles: Math.round(avgVehicles2 * 10) / 10,
       avgPersons: Math.round(avgPersons * 10) / 10,
       maxScore,
       minScore
-    }
+    },
+    isValidStreetFootage
   };
 }
 
