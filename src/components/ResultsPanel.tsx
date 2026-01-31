@@ -52,38 +52,18 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
 
         {/* Risk Score */}
         <div className="p-6 border-b border-slate-800">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between">
             <span className="text-slate-400 text-sm font-semibold tracking-wider">RISK SCORE</span>
             <span className={`px-3 py-1.5 rounded-lg text-sm font-bold ${colors.bg} border`}>
               {analysis.riskLevel}
             </span>
           </div>
           
-          {/* Score visualization */}
-          <div className="relative mb-4">
-            <div className="h-4 bg-slate-800 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${analysis.riskScore}%` }}
-                transition={{ delay: 0.3, duration: 1, ease: 'easeOut' }}
-                className={`absolute inset-y-0 left-0 bg-gradient-to-r ${colors.gradient} rounded-full`}
-              />
-            </div>
-            {/* Score markers */}
-            <div className="flex justify-between mt-2 text-xs">
-              <span className="text-green-500">0</span>
-              <span className="text-yellow-500">25</span>
-              <span className="text-orange-500">50</span>
-              <span className="text-red-500">75</span>
-              <span className="text-red-600">100</span>
-            </div>
-          </div>
-          
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-4">
             <motion.div 
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.5, type: 'spring' }}
+              transition={{ delay: 0.3, type: 'spring' }}
               className="text-center"
             >
               <span className="text-5xl font-black text-white">{analysis.riskScore}</span>
@@ -119,63 +99,69 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
           </div>
         )}
 
-        {/* Violations Detected */}
+        {/* Safety Assessment */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-400" />
-            Risk Factors Detected ({analysis.violations.length})
+            <AlertCircle className="w-4 h-4 text-blue-400" />
+            Safety Assessment
           </h3>
           
-          {analysis.violations.length === 0 ? (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 mx-auto bg-green-500/10 rounded-full flex items-center justify-center mb-3">
-                <Shield className="w-8 h-8 text-green-400" />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="p-5 rounded-xl border border-slate-700 bg-slate-800/40"
+          >
+            {analysis.riskLevel === 'LOW' ? (
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <Shield className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-green-400 font-semibold text-sm">Safe Area</p>
+                    <p className="text-slate-300 text-sm mt-1">
+                      This location shows minimal traffic hazards and pedestrian safety concerns. Vehicle flow and movement patterns are normal with no significant congestion or irregular behavior detected.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <p className="text-slate-400 text-sm">No significant risk factors detected</p>
-              <p className="text-slate-500 text-xs mt-1">This appears to be a low-risk area</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {analysis.violations.map((violation, index) => {
-                const severityColors = {
-                  high: 'bg-red-500/10 border-red-500/30 text-red-400',
-                  medium: 'bg-orange-500/10 border-orange-500/30 text-orange-400',
-                  low: 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400'
-                };
-                
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * index }}
-                    className={`p-4 rounded-xl border ${severityColors[violation.severity]}`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          violation.severity === 'high' ? 'bg-red-500/20' : 
-                          violation.severity === 'medium' ? 'bg-orange-500/20' : 'bg-yellow-500/20'
-                        }`}>
-                          {violation.type.includes('Vehicle') ? <Car className="w-5 h-5" /> : 
-                           violation.type.includes('Pedestrian') || violation.type.includes('Person') ? <Users className="w-5 h-5" /> :
-                           <AlertTriangle className="w-5 h-5" />}
-                        </div>
-                        <div>
-                          <p className="text-white font-medium text-sm">{violation.type}</p>
-                          <p className="text-xs opacity-70 capitalize">{violation.severity} severity</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-white">{violation.count}</p>
-                        <p className="text-xs opacity-60">incidents</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          )}
+            ) : analysis.riskLevel === 'MEDIUM' ? (
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-yellow-400 font-semibold text-sm">Moderate Caution Required</p>
+                    <p className="text-slate-300 text-sm mt-1">
+                      The area shows some traffic density and occasional irregular patterns. Exercise standard caution with normal traffic awareness. {analysis.violations.length > 0 && `Detected ${analysis.violations.length} risk factor${analysis.violations.length !== 1 ? 's' : ''}.`}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : analysis.riskLevel === 'HIGH' ? (
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-orange-400 font-semibold text-sm">High Risk - Use Caution</p>
+                    <p className="text-slate-300 text-sm mt-1">
+                      Multiple traffic irregularities and safety concerns detected. {analysis.violations.length > 0 && `Identified ${analysis.violations.length} risk factor${analysis.violations.length !== 1 ? 's' : ''}.`} Heightened awareness recommended for drivers and pedestrians.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-red-500 font-semibold text-sm">Critical Risk - Avoid if Possible</p>
+                    <p className="text-slate-300 text-sm mt-1">
+                      Significant hazards and safety violations detected. {analysis.violations.length > 0 && `Multiple critical risk factors (${analysis.violations.length}) identified.`} This area requires immediate attention and highest caution level.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
         </div>
 
         {/* Footer Stats */}
