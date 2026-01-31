@@ -43,6 +43,7 @@ export interface RiskAnalysis {
     maxScore: number;
     minScore: number;
   };
+  isValidStreetFootage?: boolean;
 }
 
 export interface LocationResult {
