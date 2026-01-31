@@ -14,6 +14,8 @@ interface SidebarProps {
   onAnalyze: () => void;
   isAnalyzing: boolean;
   progress: number;
+  errorMessage?: string;
+  setErrorMessage?: (message: string) => void;
 }
 
 export function Sidebar({
@@ -25,7 +27,9 @@ export function Sidebar({
   setVideoFile,
   onAnalyze,
   isAnalyzing,
-  progress
+  progress,
+  errorMessage = '',
+  setErrorMessage
 }: SidebarProps) {
   const [searchResults, setSearchResults] = useState<LocationResult[]>([]);
   const [showResults, setShowResults] = useState(false);
@@ -90,7 +94,7 @@ export function Sidebar({
   };
 
   return (
-    <div className="w-96 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-r border-slate-800/50 flex flex-col h-screen overflow-hidden">
+    <div className="w-full md:w-96 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 md:border-r border-t md:border-t-0 border-slate-800/50 flex flex-col md:h-screen h-auto md:overflow-hidden overflow-y-auto order-last md:order-none">
       {/* Logo Header */}
       <div className="p-6 border-b border-slate-800/50">
         <div className="flex items-center gap-3">
@@ -104,13 +108,35 @@ export function Sidebar({
           </div>
           <div>
             <h1 className="text-2xl font-black text-white tracking-tight">SAFE SIGHT</h1>
-            <p className="text-xs text-slate-400 font-medium tracking-wider">AI TRAFFIC RISK ANALYZER</p>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        {/* Error Message */}
+        <AnimatePresence>
+          {errorMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg flex items-start gap-3"
+            >
+              <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm text-red-400 font-medium">{errorMessage}</p>
+              </div>
+              <button
+                onClick={() => setErrorMessage?.('')}
+                className="text-red-400 hover:text-red-300 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Step 1: Location */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
