@@ -180,7 +180,7 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
 
         {/* Footer Stats */}
         <div className="p-6 border-t border-slate-800 bg-slate-950/50">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <div className="w-12 h-12 mx-auto mb-2 bg-slate-800 rounded-xl flex items-center justify-center">
                 <Video className="w-6 h-6 text-slate-400" />
@@ -199,15 +199,7 @@ export function ResultsPanel({ analysis, onClose }: ResultsPanelProps) {
                 {new Date(analysis.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             </div>
-            <div className="text-center">
-              <div className="w-12 h-12 mx-auto mb-2 bg-slate-800 rounded-xl flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-slate-400" />
-              </div>
-              <p className="text-xs text-slate-500">Total Incidents</p>
-              <p className="text-sm text-white font-medium">
-                {analysis.violations.reduce((a, b) => a + b.count, 0)}
-              </p>
-            </div>
+            
           </div>
         </div>
       </motion.div>
